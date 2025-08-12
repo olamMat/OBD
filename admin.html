@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administración de datos OBD</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Administración de datos</h1>
+    <nav>
+      <a href="index.html">Inicio</a>
+    </nav>
+  </header>
+
+  <!-- Sección principal de administración -->
+  <section id="admin-section">
+    <!-- Formulario de acceso con clave -->
+    <div id="login-section">
+      <label for="admin-pass">Ingrese clave de admin:</label>
+      <input type="password" id="admin-pass">
+      <button id="login-btn">Entrar</button>
+      <p id="login-error" class="error" style="color:red; display:none; margin-top:0.5rem;">Clave incorrecta.</p>
+    </div>
+    <!-- Área para subir el Excel, oculta hasta autenticarse -->
+    <div id="upload-section" style="display:none; margin-top:1rem;">
+      <label for="excel-upload">Seleccione archivo Excel (.xls, .xlsx):</label>
+      <input type="file" id="excel-upload" accept=".xls,.xlsx">
+      <button id="upload-btn">Subir y reemplazar datos</button>
+      <p id="upload-message" style="display:none; margin-top:0.5rem;"></p>
+    </div>
+    <!-- Mensaje de éxito al cargar el archivo -->
+    <div id="success-message" style="display:none; margin-top:1rem;">
+      <p id="success-text" style="margin-bottom:1rem;"></p>
+      <button id="success-ok-btn">OK</button>
+    </div>
+  </section>
+
+  <!-- Librería para leer archivos Excel -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <!-- Script compartido -->
+  <script src="script.js"></script>
+  <!-- Script de administración -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Clave de administrador (modificarla según sea necesario).
+      const adminPassword = 'admin123';
+      const loginBtn = document.getElementById('login-btn');
+      const loginSection = document.getElementById('login-section');
+      const uploadSection = document.getElementById('upload-section');
+      const errorMsg = document.getElementById('login-error');
+
+      // Verificar ancho de pantalla para restringir acceso en móvil
+      if (window.innerWidth < 768) {
+        const adminSection = document.getElementById('admin-section');
+        if (adminSection) {
+          adminSection.innerHTML = '<p>Esta sección solo está disponible en equipos de escritorio.</p>';
+        }
+        return;
+      }
+
+      // Comprobar si ya se autenticó en esta sesión
+      if (sessionStorage.getItem('admin_authenticated') === 'true') {
+        loginSection.style.display = 'none';
+        uploadSection.style.display = 'block';
+      }
+
+      // Manejar el evento de autenticación
+      loginBtn.addEventListener('click', function() {
+        const pass = document.getElementById('admin-pass').value;
+        if (pass === adminPassword) {
+          // Ocultar error, login y mostrar la sección de carga de archivo
+          errorMsg.style.display = 'none';
+          loginSection.style.display = 'none';
+          uploadSection.style.display = 'block';
+          // Guardar estado de autenticación en esta sesión
+          sessionStorage.setItem('admin_authenticated', 'true');
+        } else {
+          errorMsg.style.display = 'block';
+        }
+      });
+
+      // Manejar la subida del archivo y sustitución de datos
+      const uploadBtn = document.getElementById('upload-btn');
+      const fileInput = document.getElementById('excel-upload');
+      const uploadMsg = document.getElementById('upload-message');
+      const successMessage = document.getElementById('success-message');
+      const successText = document.getElementById('success-text');
+      const successOkBtn = document.getElementById('success-ok-btn');
+      uploadBtn.addEventListener('click', function() {
+        const file = fileInput.files[0];
+        if (!file) {
+          alert('Seleccione un archivo primero.');
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const sheetName = workbook.SheetNames[0];
+          const newData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: '' });
+          // Guardar datos en localStorage para que el sitio cargue la nueva base
+          localStorage.setItem('dataset', JSON.stringify(newData));
+          // Ocultar la sección de carga y mostrar mensaje de éxito con conteo de registros
+          uploadSection.style.display = 'none';
+          const count = newData.length;
+          successText.textContent = `Archivo cargado correctamente. Se han importado ${count} ${count === 1 ? 'registro' : 'registros'}.`;
+          successMessage.style.display = 'block';
+        };
+        reader.readAsArrayBuffer(file);
+      });
+
+      // Manejar botón OK después de subir el archivo
+      if (successOkBtn) {
+        successOkBtn.addEventListener('click', function() {
+          // Eliminar la bandera de autenticación para reforzar el flujo de acceso
+          sessionStorage.removeItem('admin_authenticated');
+          // Redirigir a la página principal
+          window.location.href = 'index.html';
+        });
+      }
+    });
+  </script>
+</body>
+</html>

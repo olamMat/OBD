@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de datos OBD</title>
+  <!-- Hoja de estilos principal -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Gestión de datos OBD</h1>
+    <nav>
+      <!-- Enlace a la sección de administración -->
+      <a href="admin.html">Admin</a>
+    </nav>
+  </header>
+
+  <!-- Sección de filtros -->
+  <section id="filters">
+    <!-- Filtro por Acopio (Nombre 1) -->
+    <div class="filter">
+      <label for="filter-nombre">Acopio (Nombre&nbsp;1):</label>
+      <select id="filter-nombre">
+        <option value="">Todos</option>
+      </select>
+    </div>
+    <!-- Filtro por Lote -->
+    <div class="filter">
+      <label for="filter-lote">Lote:</label>
+      <input type="text" id="filter-lote" placeholder="Escriba el lote" style="text-transform:uppercase;" />
+    </div>
+    <!-- Filtro por Tipo de material -->
+    <div class="filter">
+      <label for="filter-material">Tipo de material:</label>
+      <select id="filter-material">
+        <option value="">Todos</option>
+      </select>
+    </div>
+    <!-- Filtro por Fecha de contabilización -->
+    <div class="filter">
+      <label for="filter-fecha">Fecha (Fe.contabilización):</label>
+      <input type="date" id="filter-fecha">
+    </div>
+    <!-- Filtro por Cantidad absoluta -->
+    <div class="filter">
+      <label for="filter-cantidad">Cantidad (absoluto):</label>
+      <input type="number" id="filter-cantidad" placeholder="Número" />
+    </div>
+    <!-- Botón para limpiar todos los filtros -->
+    <div class="filter">
+      <button id="clear-filters">Limpiar filtros</button>
+    </div>
+  </section>
+
+  <!-- Sección de tabla -->
+  <section id="table-section">
+    <!-- Contador de filas en la parte superior de la tabla -->
+    <p id="row-count" class="row-count"></p>
+
+    <table id="data-table">
+      <thead>
+        <tr>
+          <th>Centro</th>
+          <th>Nombre&nbsp;1</th>
+          <th>Fe.contabilización</th>
+          <th>Lote</th>
+          <th>Referencia</th>
+          <th>Cantidad</th>
+          <th>Texto breve de material</th>
+        </tr>
+      </thead>
+      <tbody id="table-body">
+        <!-- Las filas se generan dinámicamente con JavaScript -->
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Librería para leer archivos Excel -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <!-- Script principal de la aplicación -->
+  <script src="script.js"></script>
+</body>
+</html>
