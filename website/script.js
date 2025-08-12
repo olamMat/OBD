@@ -8,15 +8,7 @@
  * filtros según el estado de los selectores.
  */
 
-// ---- Datos por defecto ----
-// Convertimos el archivo OBD.xlsx en un conjunto de objetos para poder
-// incrustarlo directamente en el código. Esta variable contiene todos los
-// registros tal y como están en el Excel. Si el administrador carga un
-// nuevo archivo mediante la interfaz de administración, los datos se
-// almacenarán en localStorage y sustituirán a este valor predeterminado.
-const defaultData = JSON.parse(`[{"Centro": 1545, "Nombre 1": "Jinotega (Agencia)", "Fe.contabilización": "2025-03-27", "Lote": "JA5P1A0413", "Referencia": 8490055473, "Cantidad": -730.2, "Texto breve de material": "Pergamino Certificado - Tolling"}, {"Centro": 1545, "Nombre 1": "Jinotega (Agencia)", "Fe.contabilización": "2025-03-24", "Lote": "JA5P1A0412", "Referencia": 8490055462, "Cantidad": -581.36, "Texto breve de material": "Pergamino Certificado - Tolling"}, {"Centro": 1678, "Nombre 1": "Montecristo", "Fe.contabilización": "2025-03-09", "Lote": "MN5P1A0070", "Referencia": 8490055413, "Cantidad": -5484.46, "Texto breve de material": "Pergamino Certificado  UA"}, {"Centro": 1545, "Nombre 1": "Jinotega (Agencia)", "Fe.contabilización": "2025-03-09", "Lote": "JA5P1A0392", "Referencia": 8490055411, "Cantidad": -235.28, "Texto breve de material": "Pergamino Certificado - Tolling"}, {"Centro": 1678, "Nombre 1": "Montecristo", "Fe.contabilización": "2025-03-08", "Lote": "MN5P1A0069", "Referencia": 8490055408, "Cantidad": -6011.06, "Texto breve de material": "Pergamino Certificado  UA"}, {"Centro": 1676, "Nombre 1": "Las Cuchillas", "Fe.contabilización": "2025-02-27", "Lote": "CH5P1A0254", "Referencia": 8490055367, "Cantidad": -139.54, "Texto breve de material": "Pergamino Certificado  UA"}, {"Centro": 1545, "Nombre 1": "Jinotega (Agencia)", "Fe.contabilización": "2025-02-27", "Lote": "JA5P1A0378", "Referencia": 8490055369, "Cantidad": -2238.84, "Texto breve de material": "Pergamino Certificado - Tolling"}, {"Centro": 1553, "Nombre 1": "Matagalpa", "Fe.contabilización": "2025-02-27", "Lote": "HO5P1B0352", "Referencia": 8490055378, "Cantidad": -208.86, "Texto breve de material": "Pergamino Certificado - Tolling"}, {"Centro": 1553, "Nombre 1": "Matagalpa", "Fe.contabilización": "2025-02-27", "Lote": "HO5P1B0351", "Referencia": 8490055377, "Cantidad": -74.02, "Texto breve de material": "Pergamino Certificado - Tolling"}, {"Centro": 1553, "Nombre 1": "Matagalpa", "Fe.contabilización": "2025-02-27", "Lote": "HO5P1B0347", "Referencia": 8490055373, "Cantidad": -736.04, "Texto breve de material": "Pergamino Certificado - Tolling"}, {"Centro": 1553, "Nombre 1": "Matagalpa", "Fe.contabilización": "2025-02-27", "Lote": "HO5P1B0346", "Referencia": 8490055372, "Cantidad": -1889.94, "Texto breve de material": "Pergamino Certificado - Tolling"}, {"Centro": 1553, "Nombre 1": "Matagalpa", "Fe.contabilización": "2025-02-27", "Lote": "HO5P1B0345", "Referencia": 8490055371, "Cantidad": -2612.28, "Texto breve de material": "Pergamino Certificado - Tolling"}, {"Centro": 1545, "Nombre 1": "Jinotega (Agencia)", "Fe.contabilización": "2025-02-26", "Lote": "JA5P1A0372", "Referencia": 8490055356, "Cantidad": -764.4, "Texto breve de material": "Pergamino Certificado  UA"}, {"Centro": 1545, "Nombre 1": "Jinotega (Agencia)", "Fe.contabilización": "2025-02-26", "Lote": "JA5P1A0375", "Referencia": 8490055359, "Cantidad": -3271.13, "Texto breve de material": "Pergamino Certificado  UA"}, {"Centro": 1626, "Nombre 1": "EL VENTARRON", "Fe.contabilización": "2025-02-26", "Lote": "EV5P1A0167", "Referencia": 8490055365, "Cantidad": -3956.97, "Texto breve de material": "Pergamino Certificado  UA"}, {"Centro": 1626, "Nombre 1": "EL VENTARRON", "Fe.contabilización": "2025-02-26", "Lote": "EV5P1A0166", "Referencia": 8490055364, "Cantidad": -65.77, "Texto breve de material": "Pergamino Certificado  UA"}, {"Centro": 1626, "Nombre 1": "EL VENTARRON", "Fe.contabilización": "2025-02-26", "Lote": "EV5P1A0165", "Referencia": 8490055363, "Cantidad": -465.99, "Texto breve de material": "Pergamino Certificado  UA"}, {"Centro": 1626, "Nombre 1": "EL VENTARRON", "Fe.contabilización": "2025-02-26", "Lote": "EV5P1A0164", "Referencia": 8490055362, "Cantidad": -341.3, "Texto breve de material": "Pergamino Certificado  UA"}, {"Centro": 1678, "Nombre 1": "Montecristo", "Fe.contabilización": "2025-02-26", "Lote": "MN5P1A0067", "Referencia": 8490055353, "Cantidad": -265.68, "Texto breve de material": "Pergamino Certificado  UA"}, {"Centro": 1678, "Nombre 1": "Montecristo", "Fe.contabilización": "2025-02-26", "Lote": "MN5P1A0066", "Referencia": 8490055352, "Cantidad": -5429.57, "Texto breve de material": "Pergamino Certificado  UA"}, {"Centro": 1560, "Nombre 1": "Yasica Sur", "Fe.contabilización": "2025-01-27", "Lote": "YS5P1A0267", "Referencia": 8490054197, "Cantidad": -1447.44, "Texto breve de material": "Pergamino Certificado - Tolling"}, {"Centro": 1560, "Nombre 1": "Yasica Sur", "Fe.contabilización": "2025-01-27", "Lote": "YS5P1A0269", "Referencia": 8490054199, "Cantidad": -322.28, "Texto breve de material": "Pergamino Certificado - Tolling"}, {"Centro": 1567, "Nombre 1": "Mancotal", "Fe.contabilización": "2025-01-27", "Lote": "MA5P1A0150", "Referencia": 8490054125, "Cantidad": -1439.76, "Texto breve de material": "Pergamino Certificado - Tolling"}, {"Centro": 1623, "Nombre 1": "PEÑAS BLANCAS", "Fe.contabilización": "2025-01-27", "Lote": "PS5P1A0177", "Referencia": 8490054133, "Cantidad": -1911.52, "Texto breve de material": "Pergamino Certificado - Tolling"}, {"Centro": 1650, "Nombre 1": "El Recreo", "Fe.contabilización": "2025-01-27", "Lote": "ER5P1A0105", "Referencia": 8490054193, "Cantidad": -2095.86, "Texto breve de material": "Pergamino Certificado - Tolling"}, {"Centro": 1650, "Nombre 1": "El Recreo", "Fe.contabilización": "2025-01-27", "Lote": "ER5P1A0104", "Referencia": 8490054190, "Cantidad": -353.6, "Texto breve de material": "Pergamino Certificado - Tolling"}, {"Centro": 1650, "Nombre 1": "El Recreo", "Fe.contabilización": "2025-01-27", "Lote": "ER5P1A0103", "Referencia": 8490054185, "Cantidad": -581.38, "Texto breve de material": "Pergamino Certificado - Tolling"}, {"Centro": 1650, "Nombre 1": "El Recreo", "Fe.contabilización": "2025-01-27", "Lote": "ER5P1A0102", "Referencia": 8490054181, "Cantidad": -1151.72, "Texto breve de material": "Pergamino Certificado - Tolling"}, {"Centro": 1650, "Nombre 1": "El Recreo", "Fe.contabilización": "2025-01-27", "Lote": "ER5P1A0101", "Referencia": 8490054179, "Cantidad": -675.7, "Texto breve de material": "Pergamino Certificado - Tolling"}, {"Centro": 1653, "Nombre 1": "Guapotal", "Fe.contabilización": "2025-01-27", "Lote": "GA5P1A0163", "Referencia": 8490054226, "Cantidad": -2169.78, "Texto breve de material": "Pergamino Certificado - Tolling"}, {"Centro": 1532, "Nombre 1": "Abisinia", "Fe.contabilización": "2025-01-26", "Lote": "AB5P1D0317", "Referencia": 8490054004, "Cantidad": -2290.36, "Texto breve de material": "Pergamino Certificado  UA"}, {"Centro": 1534, "Nombre 1": "Asturias", "Fe.contabilización": "2025-01-26", "Lote": "AT5P1A0046", "Referencia": 8490053976, "Cantidad": -5242.2, "Texto breve de material": "Pergamino Certificado  UA"}, {"Centro": 1534, "Nombre 1": "Asturias", "Fe.contabilización": "2025-01-26", "Lote": "AT5P1A0045", "Referencia": 8490053966, "Cantidad": -284.65, "Texto breve de material": "Pergamino Certificado  UA"}, {"Centro": 1542, "Nombre 1": "El Limon", "Fe.contabilización": "2025-01-26", "Lote": "EL5P1B0177", "Referencia": 8490054040, "Cantidad": -5233.38, "Texto breve de material": "Pergamino Certificado  UA"}, {"Centro": 1542, "Nombre 1": "El Limon", "Fe.contabilización": "2025-01-26", "Lote": "EL5P1B0176", "Referencia": 8490054037, "Cantidad": -844.04, "Texto breve de material": "Pergamino Certificado  UA"}, {"Centro": 1542, "Nombre 1": "El Limon", "Fe.contabilización": "2025-01-26", "Lote": "EL5P1B0175", "Referencia": 8490054033, "Cantidad": -3771.16, "Texto breve de material": "Pergamino Certificado  UA"}]`);
-
-// Almacén de datos global. Inicialmente vacío, se cargará al iniciar la página.
+// Almacén de datos global. Inicialmente vacío, se cargará al iniciar la página mediante la API.
 let dataset = [];
 
 /**
@@ -26,21 +18,16 @@ let dataset = [];
  * (OBD.xlsx) mediante fetch y la librería SheetJS (xlsx).
  */
 function loadDataset() {
-  const stored = localStorage.getItem('dataset');
-  if (stored) {
-    try {
-      dataset = JSON.parse(stored);
+  // Solicitar datos al servidor
+  fetch('/api/data')
+    .then((res) => res.json())
+    .then((data) => {
+      dataset = data;
       initPage();
-      return;
-    } catch (err) {
-      console.error('Error al parsear los datos de localStorage:', err);
-      // Si hay un problema con los datos almacenados, se eliminan y se carga el por defecto
-      localStorage.removeItem('dataset');
-    }
-  }
-  // Si no hay datos en localStorage, utilizar los datos predeterminados
-  dataset = defaultData.slice();
-  initPage();
+    })
+    .catch((err) => {
+      console.error('Error al cargar datos desde el servidor:', err);
+    });
 }
 
 /**

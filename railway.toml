@@ -1,0 +1,23 @@
+[build]
+builder = "DOCKERFILE"
+
+# If your Dockerfile is named something other than "Dockerfile" or located in a
+# different directory, update dockerfilePath accordingly. Railway will
+# automatically detect and build from a Dockerfile if present, but specifying
+# it here makes the intent explicit and ensures consistency.
+dockerfilePath = "Dockerfile"
+
+[deploy]
+# Run a single replica of the service. Adjust this value if you need to scale
+# horizontally. Note: the free plan on Railway limits concurrency.
+numReplicas = 1
+
+# Path used by Railway to determine if the service has started correctly. Our
+# Express app serves the index.html from the root path, so we use "/". If you
+# change the route structure, update this value.
+healthcheckPath = "/"
+
+# Maximum number of seconds Railway will wait for the healthcheck path to
+# respond before marking the deployment as failed. Increase if your app has a
+# long startup time.
+healthcheckTimeout = 300

@@ -1,0 +1,15 @@
+{
+  "name": "dynamic-site",
+  "version": "1.0.0",
+  "description": "Sitio web dinámico con Node.js, Express, SQLite y carga de archivos Excel",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "multer": "^1.4.5-lts.1",
+    "sqlite3": "^5.1.2",
+    "xlsx": "^0.18.5"
+  }
+}

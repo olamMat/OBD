@@ -37,8 +37,6 @@
     </div>
   </section>
 
-  <!-- Librería para leer archivos Excel -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <!-- Script compartido -->
   <script src="script.js"></script>
   <!-- Script de administración -->
@@ -94,21 +92,29 @@
           alert('Seleccione un archivo primero.');
           return;
         }
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const data = new Uint8Array(e.target.result);
-          const workbook = XLSX.read(data, { type: 'array' });
-          const sheetName = workbook.SheetNames[0];
-          const newData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: '' });
-          // Guardar datos en localStorage para que el sitio cargue la nueva base
-          localStorage.setItem('dataset', JSON.stringify(newData));
-          // Ocultar la sección de carga y mostrar mensaje de éxito con conteo de registros
-          uploadSection.style.display = 'none';
-          const count = newData.length;
-          successText.textContent = `Archivo cargado correctamente. Se han importado ${count} ${count === 1 ? 'registro' : 'registros'}.`;
-          successMessage.style.display = 'block';
-        };
-        reader.readAsArrayBuffer(file);
+        // Construir el FormData y enviar al servidor
+        const formData = new FormData();
+        formData.append('file', file);
+        fetch('/api/upload', {
+          method: 'POST',
+          body: formData
+        })
+          .then((res) => res.json())
+          .then((response) => {
+            if (response.error) {
+              alert('Error al subir el archivo: ' + response.error);
+              return;
+            }
+            // Ocultar la sección de carga y mostrar mensaje de éxito con conteo de registros
+            uploadSection.style.display = 'none';
+            const count = response.count;
+            successText.textContent = `Archivo cargado correctamente. Se han importado ${count} ${count === 1 ? 'registro' : 'registros'}.`;
+            successMessage.style.display = 'block';
+          })
+          .catch((err) => {
+            console.error('Error al subir el archivo:', err);
+            alert('Hubo un error al subir el archivo');
+          });
       });
 
       // Manejar botón OK después de subir el archivo
